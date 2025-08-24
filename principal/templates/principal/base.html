@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Minha Empresa{% endblock %}</title>
+  <link rel="icon" href="{% static 'principal/img/logo2.png' %}" type="image/x-icon">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300..900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+
+
+/* Navbar atualizada */
+.custom-navbar {
+  background: linear-gradient(90deg, #1a252f 0%, #223045 100%);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: saturate(180%) blur(10px);
+  position: fixed;
+  width: 100%;
+  z-index: 1100;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.4s ease;
+}
+
+.custom-navbar .navbar-brand {
+  color: #f0f0f0 !important;
+  font-weight: 700;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.custom-navbar .navbar-brand:hover {
+  color: #f0f0f0 !important; /* mesma cor sem brilho azul */
+  text-shadow: none;
+  text-decoration: none;
+}
+
+.custom-navbar .btn-link {
+  color: #f0f0f0;
+  font-size: 1.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.custom-navbar .btn-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #f0f0f0; /* sem azul no hover */
+  text-shadow: none;
+  text-decoration: none;
+}
+
+.custom-navbar .navbar-nav .nav-link {
+  color: #e0e0e0;
+  font-weight: 500;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  user-select: none;
+}
+
+.custom-navbar .navbar-nav .nav-link:hover,
+.custom-navbar .navbar-nav .nav-link:focus {
+  color: #f0f0f0; /* sem azul */
+  text-shadow: none;
+  text-decoration: none;
+}
+
+.custom-navbar form button.btn-link {
+  color: #f0f0f0;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+.custom-navbar form button.btn-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #f0f0f0; /* sem azul */
+  text-shadow: none;
+  text-decoration: none;
+}
+
+.custom-navbar i.fa-user {
+  font-size: 1.15rem;
+  margin-right: 0.25rem;
+  color: #f0f0f0; /* sem azul */
+}
+
+
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light custom-navbar fixed-top">
+    <div class="container-fluid">
+      
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+        <img src="{% static 'principal/img/logo.png' %}" alt="Logo" width="40" height="40" class="me-2 d-inline-block align-text-top" />
+        OCTOSYS
+      </a>
+      <div class="collapse navbar-collapse" id="navbarMenu">
+        <ul class="navbar-nav ms-auto d-flex align-items-center">
+            <li class="nav-item me-3">
+            <a class="" href="{% url 'home' %}" style="text-decoration: none;">
+            <span class="nav-link text-white"><i class="fa fa-gear me-2"></i>Configurações</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <form action="{% url 'logout' %}" method="post" class="m-0 p-0">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link text-white p-0 m-0" style="text-decoration: none;">
+                <i class="fas fa-sign-out-alt me-1"></i> Sair
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content" id="mainContent">
+    <div class="container pt-5" style="margin-top: 30px;">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const sidebar = document.getElementById("sidebar");
+      const content = document.getElementById("mainContent");
+      const toggleBtn = document.getElementById("toggleSidebar");
+
+      // Começa colapsado
+      sidebar.classList.add("collapsed");
+      content.classList.add("full");
+
+    toggleBtn.addEventListener("click", function () {
+      if (!sidebar.classList.contains("collapsed")) {
+        // 1. Fecha todos os dropdowns abertos
+        const openedMenus = sidebar.querySelectorAll('.collapse.show');
+        openedMenus.forEach(menu => {
+          const collapseInstance = bootstrap.Collapse.getInstance(menu) || new bootstrap.Collapse(menu, { toggle: false });
+          collapseInstance.hide();
+        });
+
+        // 2. Espera a animação do dropdown recolher (350ms), depois colapsa a sidebar
+        sidebar.classList.add("collapsing-icons");
+        setTimeout(() => {
+          sidebar.classList.remove("collapsing-icons");
+          sidebar.classList.add("collapsed");
+          content.classList.add("full");
+        }, 400);
+      } else {
+        // Expandir sidebar
+        sidebar.classList.remove("collapsed");
+        content.classList.remove("full");
+      }
+    });
+
+      // Expande sidebar ao abrir submenu
+      document.querySelectorAll('.sidebar .nav-link[data-bs-toggle="collapse"]').forEach(link => {
+        link.addEventListener('click', () => {
+          if (sidebar.classList.contains('collapsed')) {
+            sidebar.classList.remove('collapsed');
+            content.classList.remove('full');
+          }
+        });
+      });
+
+      // Ativa tooltips dos ícones
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    });
+  </script>
+</body>
+</html>

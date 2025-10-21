@@ -15,7 +15,6 @@ class Fabricante(models.Model):
     def __str__(self):
         return self.nome
 
-
 # Create your models here.
 class Produto(models.Model):
     #sera feito em definiçoes

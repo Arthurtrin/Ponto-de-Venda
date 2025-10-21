@@ -109,7 +109,7 @@
 
       <!-- Coluna Esquerda -->
       <div class="col-lg-8">
-        
+        <br>
         <!-- Input Produto -->
         <div class="mb-4">
           <input type="text" class="form-control product-input" placeholder="Digite ou escaneie o código do produto">
@@ -141,19 +141,6 @@
 
       <!-- Coluna Direita -->
       <div class="col-lg-4">
-        <div class="card">
-          <div class="card-body summary">
-            <h5 class="mb-3"><i class="fa-solid fa-receipt"></i> Resumo da Compra</h5>
-            <p><strong>Subtotal:</strong> <span id="subtotalCompra">R$ 0,00</span></p>
-            
-            <hr>
-            <p class="total-highlight">TOTAL: <span id="totalCompra">R$ 0,00</span></p>
-            <hr>
-            <p><strong>Forma de Pagamento:</strong> Dinheiro</p>
-            <p><strong>Recebido:</strong> R$ 0,00</p>
-            <p><strong>Troco:</strong> R$ 0,00</p>
-          </div>
-        </div>
 
         <!-- Botões -->
         <div class="actions mt-4">
@@ -173,6 +160,22 @@
             <i class="fa-solid fa-ban"></i> Cancelar
           </button>
         </div>
+
+        <div class="card">
+          <div class="card-body summary">
+            <h5 class="mb-3"><i class="fa-solid fa-receipt"></i> Resumo da Compra</h5>
+            <p><strong>Subtotal:</strong> <span id="subtotalCompra">R$ 0,00</span></p>
+            
+            <hr>
+            <p class="total-highlight">TOTAL: <span id="totalCompra">R$ 0,00</span></p>
+            <hr>
+            <p><strong>Forma de Pagamento:</strong> Dinheiro</p>
+            <p><strong>Recebido:</strong> R$ 0,00</p>
+            <p><strong>Troco:</strong> R$ 0,00</p>
+          </div>
+        </div>
+
+        
       </div>
 
     </div>
@@ -181,8 +184,6 @@
 
 
 <!-- Modal -->
-
-
 <div class="modal fade" id="finalizarVendaModal" tabindex="-1" aria-labelledby="finalizarVendaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <form method="POST" action="{% url 'finalizar_venda' %}" id="formFinalizarVenda">
@@ -252,40 +253,7 @@
   </div>
 </div>
 
-<script>
-document.getElementById("formFinalizarVenda").addEventListener("submit", function(e) {
-    // pegar produtos da tabela
-    const produtos = [];
-    document.querySelectorAll("#tabelaProdutos tbody tr").forEach(tr => {
-        const codigo = tr.children[0].textContent.trim();
-        const nome = tr.children[1].textContent.trim();
-        const preco = parseFloat(tr.children[2].textContent.replace("R$", "").replace(",", ".").trim());
-        const subtotal = parseFloat(tr.children[3].textContent.replace("R$", "").replace(",", ".").trim());
-        const qtd = parseInt(tr.querySelector(".qtd-input").value);
 
-        produtos.push({codigo, nome, preco, qtd, subtotal});
-    });
-
-    // colocar no input hidden
-    document.getElementById("produtos_json").value = JSON.stringify(produtos);
-
-    // desconto
-    const descontoEl = document.getElementById("descontoPercentual");
-    document.getElementById("descontoFinal").value = descontoEl ? parseFloat(descontoEl.value) || 0 : 0;
-
-    // forma de pagamento
-    const forma = formaUnico.value || document.getElementById("formaCombinada").value;
-    document.getElementById("forma_pagamento_final").value = forma;
-
-    // dinheiro entregue e troco
-    document.getElementById("valor_entregue_final").value = valorEntregue.value || 0;
-    document.getElementById("troco_final").value = troco.innerText.replace(",", ".").trim();
-
-    // subtotal e total
-    document.getElementById("subtotal_final").value = document.getElementById("subtotalCompra").textContent.replace("R$", "").replace(",", ".").trim();
-    document.getElementById("total_final").value = document.getElementById("totalCompra").textContent.replace("R$", "").replace(",", ".").trim();
-});
-</script>
 
 
 <!-- Modal -->
@@ -351,6 +319,41 @@ document.getElementById("formFinalizarVenda").addEventListener("submit", functio
               </div>
             </div>
 </div>
+
+<script>
+document.getElementById("formFinalizarVenda").addEventListener("submit", function(e) {
+    // pegar produtos da tabela
+    const produtos = [];
+    document.querySelectorAll("#tabelaProdutos tbody tr").forEach(tr => {
+        const codigo = tr.children[0].textContent.trim();
+        const nome = tr.children[1].textContent.trim();
+        const preco = parseFloat(tr.children[2].textContent.replace("R$", "").replace(",", ".").trim());
+        const subtotal = parseFloat(tr.children[3].textContent.replace("R$", "").replace(",", ".").trim());
+        const qtd = parseInt(tr.querySelector(".qtd-input").value);
+
+        produtos.push({codigo, nome, preco, qtd, subtotal});
+    });
+
+    // colocar no input hidden
+    document.getElementById("produtos_json").value = JSON.stringify(produtos);
+
+    // desconto
+    const descontoEl = document.getElementById("descontoPercentual");
+    document.getElementById("descontoFinal").value = descontoEl ? parseFloat(descontoEl.value) || 0 : 0;
+
+    // forma de pagamento
+    const forma = formaUnico.value || document.getElementById("formaCombinada").value;
+    document.getElementById("forma_pagamento_final").value = forma;
+
+    // dinheiro entregue e troco
+    document.getElementById("valor_entregue_final").value = valorEntregue.value || 0;
+    document.getElementById("troco_final").value = troco.innerText.replace(",", ".").trim();
+
+    // subtotal e total
+    document.getElementById("subtotal_final").value = document.getElementById("subtotalCompra").textContent.replace("R$", "").replace(",", ".").trim();
+    document.getElementById("total_final").value = document.getElementById("totalCompra").textContent.replace("R$", "").replace(",", ".").trim();
+});
+</script>
 
 <!-- desconto -->
 <script>

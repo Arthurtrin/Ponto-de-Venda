@@ -47,7 +47,6 @@ def finalizar_venda(request):
         # -> "Cartao + Pix"
         # Aqui você pode salvar a venda no banco
         # por exemplo, criar objetos Venda e ItemVenda no seu modelo
-
         
         produtos = juntar_produtos_iguais(produtos)
     

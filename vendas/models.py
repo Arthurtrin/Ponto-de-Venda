@@ -14,7 +14,7 @@ class Vendas(models.Model):
     dataHora = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.nome} - {self.dataHora}"
+        return f"Venda: {self.dataHora}"
 
 class ProdutosVendas(models.Model):
     venda = models.ForeignKey(Vendas, on_delete=models.PROTECT)
@@ -24,4 +24,4 @@ class ProdutosVendas(models.Model):
     subtotal = models.FloatField()
 
     def __str__(self):
-        return f"{self.venda} - {self.codProduto}"
+        return f"{self.venda} - {self.produto}"
